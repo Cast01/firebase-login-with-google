@@ -1,7 +1,5 @@
 import { createContext, useState, ReactNode, useEffect } from "react";
 
-import { useNavigate } from "react-router-dom";
-
 import { firebase, auth } from '../services/firebase';
 import { signOut, getAuth } from 'firebase/auth';
 
@@ -25,8 +23,6 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider(props: AuthContextProviderProps) {
   const [ user, setUser ] = useState<userType>();
-
-  const navigate = useNavigate();
 
   async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
