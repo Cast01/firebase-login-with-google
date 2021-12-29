@@ -22,14 +22,23 @@ type userType = {
 export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthContextProvider(props: AuthContextProviderProps) {
-  const [ user, setUser ] = useState<userType>();
+
+  const [ user, setUser ] = useState<userType>(() => {
+    const storagedSession = localStorage.getItem('respUserKey')
+  
+    if(storagedSession) {
+      const session = JSON.parse(storagedSession)
+      return session
+    }
+  
+    return null
+  });
+  console.log(user);
 
   async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
 
     const resp = await auth.signInWithPopup(provider);
-
-    console.log(resp)
 
     if (resp.user) {
       const { displayName, photoURL, uid } = resp.user;
@@ -37,6 +46,13 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
       if (!displayName || !photoURL) {
         throw new Error('Missing informations from your Google Account.');
       }
+
+      const teste = {
+        name: displayName,
+        avatar: photoURL,
+        id: uid,
+      }
+      localStorage.setItem('respUserKey', JSON.stringify(teste));
 
       setUser({
         name: displayName,
@@ -49,12 +65,14 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
   function signOutWithGoogle() {
     signOut(getAuth()).then(r => {
       console.log('Desconectado!');
+      localStorage.removeItem('respUserKey');
       window.location.href = '/';
     });
   }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
+
       if (user) {
         const { displayName, photoURL, uid } = user;
         
@@ -67,6 +85,7 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
           avatar: photoURL,
           id: uid,
         });
+        // console.log(user);
       }
     })
     return(() => {
