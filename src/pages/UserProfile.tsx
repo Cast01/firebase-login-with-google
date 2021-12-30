@@ -1,19 +1,18 @@
-import '../styles/loginPage.css';
-
+import boxIconLogOut from '../assets/images/bx-log-out.svg';
 import { useAuth } from '../hooks/useAuth';
 
-import boxIcon from '../images/bx-log-out.svg';
-
 export function UserProfile() {
-  const { user, signOutWithGoogle } = useAuth();
+  const { user, signOutGoogle } = useAuth();
 
   return(
     <div className="container">
-      <img onClick={signOutWithGoogle} className='box-icon' src={boxIcon} alt="Icone de logout" title="Sair" />
-      <img className='perfilImg' src={user?.avatar} alt="Perfil" />
-      <span className="name">
-        Olá, {user?.name}
-      </span>
+      <div>Meu perfil</div>
+      <span className="boxicon">
+        <img src={boxIconLogOut} alt="Icon logout" className="boxicon-logOut" onClick={signOutGoogle} />
+        </span>
+      <img src={user?.avatar} alt="Peril" className="perfil-img" />
+      <span className="name">Nome: <strong>{user?.name}</strong></span>
+      <span className="email">email: <strong>{user?.email}</strong></span>
     </div>
   )
 }
