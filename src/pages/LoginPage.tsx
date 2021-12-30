@@ -1,8 +1,7 @@
 import { useAuth } from '../hooks/useAuth';
+import '../styles/loginPage.css';
 
 import { useNavigate } from 'react-router-dom';
-
-import '../styles/loginPage.css';
 
 export function LoginPage() {
   const { user, signInWithGoogle } = useAuth();
@@ -13,13 +12,15 @@ export function LoginPage() {
     if (!user) {
       await signInWithGoogle();
     }
-    navigate('/userProfile')
+    navigate('/userProfile');
   }
 
   return(
     <div className="container">
-      <div>LOGIN</div>
+      <h1 className="title">
+        LOGIN
+      </h1>
       <button onClick={handleLogin}>Entrar com o Google</button>
     </div>
-  )
+  );
 }

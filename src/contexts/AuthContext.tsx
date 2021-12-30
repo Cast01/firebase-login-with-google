@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect, ReactNode } from "react"
+import { createContext, useEffect, useState, ReactNode } from 'react';
 
 import { firebase, auth } from '../services/firebase';
 import { signOut, getAuth } from 'firebase/auth';
@@ -16,24 +16,23 @@ type AuthContextProviderP = {
 type userT = {
   name: string,
   avatar: string,
-  id: string,
+  id: string;
   email: string,
 }
 
 export const AuthContext = createContext({} as AuthContextT);
 
 export function AuthContextProvider(props: AuthContextProviderP) {
-  const [user, setUser] = useState<userT>(() => {
-    const userStorageObjGet = localStorage.getItem('userStorageKey');
+  const [ user, setUser ] = useState<userT>(() => {
+    const userStorageGet = localStorage.getItem('userStorageKey');
 
-    if (userStorageObjGet) {
-      const userStorageObjParse = JSON.parse(userStorageObjGet);
-      return userStorageObjParse
+    if (userStorageGet) {
+      const userStorageParse = JSON.parse(userStorageGet);
+      return userStorageParse;
     }
 
     return null
   });
-  console.log(user)
 
   async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -44,16 +43,16 @@ export function AuthContextProvider(props: AuthContextProviderP) {
       const { displayName, photoURL, uid, email } = resp.user;
 
       if (!displayName || !photoURL || !email) {
-        throw new Error('Missing informations from your google account.');
+        throw new Error('Missing informations from your Google Account.');
       }
 
-      let userStorageObj = {
+      let userStorageSet = {
         name: displayName,
         avatar: photoURL,
         id: uid,
-        email: email
+        email: email,
       }
-      localStorage.setItem('userStorageKey', JSON.stringify(userStorageObj));
+      localStorage.setItem('userStorageKey', JSON.stringify(userStorageSet));
 
       setUser({
         name: displayName,
@@ -65,7 +64,7 @@ export function AuthContextProvider(props: AuthContextProviderP) {
   }
 
   function signOutGoogle() {
-    let auth = getAuth();
+    const auth = getAuth();
     signOut(auth).then(() => {
       localStorage.removeItem('userStorageKey');
       window.location.href = '/login';
@@ -78,7 +77,7 @@ export function AuthContextProvider(props: AuthContextProviderP) {
         const { displayName, photoURL, uid, email } = user;
   
         if (!displayName || !photoURL || !email) {
-          throw new Error('Missing informations from your google account.');
+          throw new Error('Missing informations from your Google Account.');
         }
   
         setUser({
@@ -91,12 +90,12 @@ export function AuthContextProvider(props: AuthContextProviderP) {
     });
     return(() => {
       unsubscribe();
-    })
+    });
   }, []);
 
   return(
-    <AuthContext.Provider value={{user, signInWithGoogle, signOutGoogle}}>
+    <AuthContext.Provider value={{ user, signInWithGoogle, signOutGoogle }}>
       {props.children}
     </AuthContext.Provider>
-  )
+  );
 }

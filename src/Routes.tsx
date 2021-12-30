@@ -1,10 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthContextProvider } from "./contexts/AuthContext";
 
-import { LoginPage } from './pages/LoginPage';
-
-import { AuthContextProvider } from './contexts/AuthContext';
-
-import { RouteProtection } from './routes/RouteProtection';
+import { LoginPage } from "./pages/LoginPage";
+import { RouteProtection } from "./routes/RouteProtection";
 
 export function RoutesFunction() {
   return (
