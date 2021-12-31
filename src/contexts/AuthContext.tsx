@@ -1,30 +1,29 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
-
 import { firebase, auth } from '../services/firebase';
-import { signOut, getAuth } from 'firebase/auth';
+import { signOut, getAuth } from  'firebase/auth';
 
-type AuthContextT = {
-  user: userT | undefined,
-  signInWithGoogle: () => Promise<void>,
+interface AuthContextT {
+  user: userT,
+  signInWithGoogle:() => Promise<void>,
   signOutGoogle: () => void,
 }
 
-type AuthContextProviderP = {
+interface AuthContextProviderP {
   children: ReactNode,
 }
 
-type userT = {
-  name: string,
-  avatar: string,
-  id: string;
+interface userT {
+  name:string,
+  avatar:string,
+  id: string,
   email: string,
 }
 
 export const AuthContext = createContext({} as AuthContextT);
 
-export function AuthContextProvider(props: AuthContextProviderP) {
-  const [ user, setUser ] = useState<userT>(() => {
-    const userStorageGet = localStorage.getItem('userStorageKey');
+export function  AuthContextProvider(props: AuthContextProviderP) {
+  const [user, setUser] = useState<userT>(() => {
+    let userStorageGet = localStorage.getItem('userStorageKey');
 
     if (userStorageGet) {
       const userStorageParse = JSON.parse(userStorageGet);
@@ -33,6 +32,7 @@ export function AuthContextProvider(props: AuthContextProviderP) {
 
     return null
   });
+  console.log(user)
 
   async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -40,10 +40,11 @@ export function AuthContextProvider(props: AuthContextProviderP) {
     const resp = await auth.signInWithPopup(provider);
 
     if (resp.user) {
-      const { displayName, photoURL, uid, email } = resp.user;
+      const {displayName,photoURL,uid,email} = resp.user;
 
       if (!displayName || !photoURL || !email) {
-        throw new Error('Missing informations from your Google Account.');
+        alert('Seu nome ou sua foto de perfil não foi encontrado');
+        throw new Error();
       }
 
       let userStorageSet = {
@@ -67,17 +68,19 @@ export function AuthContextProvider(props: AuthContextProviderP) {
     const auth = getAuth();
     signOut(auth).then(() => {
       localStorage.removeItem('userStorageKey');
-      window.location.href = '/login';
-    });
+      window.location.href = '/';
+      alert('Desconectado');
+    })
   }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        const { displayName, photoURL, uid, email } = user;
-  
+        const {displayName,photoURL,uid,email} = user;
+
         if (!displayName || !photoURL || !email) {
-          throw new Error('Missing informations from your Google Account.');
+          alert('Seu nome ou sua foto de perfil não foi encontrado');
+          throw new Error();
         }
   
         setUser({
@@ -89,12 +92,13 @@ export function AuthContextProvider(props: AuthContextProviderP) {
       }
     });
     return(() => {
+      alert('Evento interrompido.');
       unsubscribe();
     });
   }, []);
 
   return(
-    <AuthContext.Provider value={{ user, signInWithGoogle, signOutGoogle }}>
+    <AuthContext.Provider value={{user,signInWithGoogle,signOutGoogle}}>
       {props.children}
     </AuthContext.Provider>
   );

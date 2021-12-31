@@ -1,11 +1,9 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth"
 import { UserProfile } from "../pages/UserProfile";
 
-export function RouteProtection() {
+export const RouteProtection = () => {
   const { user } = useAuth();
 
-  return(
-    user ? <UserProfile /> : <Navigate to="/login" />
-  );
+  return !user ? <Navigate to="/" /> : <UserProfile />
 }
