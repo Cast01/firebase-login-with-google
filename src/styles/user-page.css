@@ -1,0 +1,22 @@
+main .title {
+  font-size: clamp(20px, 10vw, 35px);
+}
+main img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  outline: 2px solid rgb(0, 255, 0);
+  margin-bottom: 50px;
+  margin-left: auto;
+}
+main .name {
+  font-size: 14px;
+  margin-bottom: 15px;
+  margin-right: auto;
+}
+main .email {
+  font-size: 14px;
+  word-break: break-all;
+  margin-bottom: 15px;
+  margin-right: auto;
+}

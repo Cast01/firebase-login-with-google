@@ -1,22 +1,20 @@
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import '../styles/login-page.css';
 
 export function LoginPage() {
   const { user, signInWithGoogle } = useAuth();
-  const navigate = useNavigate();
 
-  async function handleLoginWithGoogle() {
+  async function handleLogin() {
     if (!user) {
       await signInWithGoogle();
     }
-    navigate('/userProfile');
+    window.location.href = '/userPage';
   }
 
   return(
-    <div className="container">
+    <main>
       <h1 className="title">LOGIN</h1>
-      <button onClick={handleLoginWithGoogle}>Entrar com o Google</button>
-    </div>
+      <button onClick={handleLogin}>Entrar com o Google</button>
+    </main>
   );
 }

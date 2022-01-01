@@ -3,26 +3,29 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 230px;
+  min-width: 220px;
 }
-.container {
+main {
   background-color: #fff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 0 15px 5px rgba(255, 255, 255, .2);
-  width: clamp(210px, 90vw, 380px);
+  width: clamp(200px, 90vw, 380px);
 }
-.container .title {
-  margin-bottom: 50px;
+main .title {
   letter-spacing: 2px;
+  margin-bottom: 50px;
 }
-.container button {
-  background-color: rgb(255, 68, 68);
+main button {
+  background-color: rgb(255, 57, 57);
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 4px;
   font-weight: 600;
   cursor: pointer;
+  transition: .5s;
+}
+main button:hover {
+  background-color: rgb(223, 52, 52);
 }

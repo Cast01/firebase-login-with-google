@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthContextProvider } from './contexts/AuthContext';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthContextProvider } from "./contexts/AuthContext";
 
-import { LoginPage } from './pages/LoginPage';
-import { RouteProtection } from './routes/RouteProtection';
+import { LoginPage } from "./pages/LoginPage";
+import { RouteProtection } from "./routes/RouteProtection";
 
 export function RoutesFunction() {
   return (
@@ -10,7 +10,7 @@ export function RoutesFunction() {
       <AuthContextProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/userProfile" element={<RouteProtection />} />
+          <Route path="/userPage" element={<RouteProtection />} />
         </Routes>
       </AuthContextProvider>
     </Router>

@@ -1,10 +1,10 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
 import { firebase, auth } from '../services/firebase';
-import { signOut, getAuth } from  'firebase/auth';
+import { signOut, getAuth } from 'firebase/auth';
 
 interface AuthContextT {
   user: userT,
-  signInWithGoogle:() => Promise<void>,
+  signInWithGoogle: () => Promise<void>,
   signOutGoogle: () => void,
 }
 
@@ -13,24 +13,24 @@ interface AuthContextProviderP {
 }
 
 interface userT {
-  name:string,
-  avatar:string,
-  id: string,
+  name: string,
+  avatar: string,
   email: string,
+  id: string,
 }
 
 export const AuthContext = createContext({} as AuthContextT);
 
-export function  AuthContextProvider(props: AuthContextProviderP) {
-  const [user, setUser] = useState<userT>(() => {
-    let userStorageGet = localStorage.getItem('userStorageKey');
+export function AuthContextProvider(props: AuthContextProviderP) {
+  const [user,setUser] = useState<userT>(() => {
+    const userStorageGet = localStorage.getItem('userStorageKey');
 
     if (userStorageGet) {
       const userStorageParse = JSON.parse(userStorageGet);
       return userStorageParse;
     }
 
-    return null
+    return null;
   });
   console.log(user)
 
@@ -40,26 +40,27 @@ export function  AuthContextProvider(props: AuthContextProviderP) {
     const resp = await auth.signInWithPopup(provider);
 
     if (resp.user) {
-      const {displayName,photoURL,uid,email} = resp.user;
+      const { displayName, photoURL, email, uid } = resp.user;
 
       if (!displayName || !photoURL || !email) {
-        alert('Seu nome ou sua foto de perfil não foi encontrado');
+        alert('Erro: Nome, foto ou email não encontrado.');
+        window.location.href = '/';
         throw new Error();
       }
 
-      let userStorageSet = {
+      const userStorageSet = {
         name: displayName,
         avatar: photoURL,
-        id: uid,
         email: email,
+        id: uid,
       }
       localStorage.setItem('userStorageKey', JSON.stringify(userStorageSet));
 
       setUser({
         name: displayName,
         avatar: photoURL,
-        id: uid,
         email: email,
+        id: uid,
       });
     }
   }
@@ -69,30 +70,30 @@ export function  AuthContextProvider(props: AuthContextProviderP) {
     signOut(auth).then(() => {
       localStorage.removeItem('userStorageKey');
       window.location.href = '/';
-      alert('Desconectado');
-    })
+      alert('Para desconectar clique em OK.')
+    });
   }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
       if (user) {
-        const {displayName,photoURL,uid,email} = user;
-
+        const { displayName, photoURL, email, uid } = user;
+  
         if (!displayName || !photoURL || !email) {
-          alert('Seu nome ou sua foto de perfil não foi encontrado');
+          alert('Erro: Nome, foto ou email não encontrado.');
+          window.location.href = '/';
           throw new Error();
         }
   
         setUser({
           name: displayName,
           avatar: photoURL,
-          id: uid,
           email: email,
+          id: uid,
         });
       }
     });
     return(() => {
-      alert('Evento interrompido.');
       unsubscribe();
     });
   }, []);

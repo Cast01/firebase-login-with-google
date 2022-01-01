@@ -1,16 +1,16 @@
 import { useAuth } from '../hooks/useAuth';
-import '../styles/user-profile.css';
+import '../styles/user-page.css';
 
-export function UserProfile() {
+export function UserPage() {
   const { user, signOutGoogle } = useAuth();
 
   return(
-    <div className="container">
+    <main>
       <h1 className="title">MEU PERFIL</h1>
-      <img src={user.avatar} alt="Perfil img" />
+      <img src={user.avatar} alt="" />
       <span className="name">Nome: <strong>{user.name}</strong></span>
       <span className="email">Email: <strong>{user.email}</strong></span>
       <button onClick={signOutGoogle}>Desconectar</button>
-    </div>
+    </main>
   );
 }
